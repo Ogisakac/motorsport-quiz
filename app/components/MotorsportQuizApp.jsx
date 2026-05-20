@@ -198,27 +198,24 @@ const currentQuestion = filteredQuestions[currentIndex];
       accuracy,
     };
 
-    try{
-        await fetch("/api/leaderboard", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        playerName: playerName || "Player",
-        score,
-        accuracy,
-      }),
-    });
+   try {
+  await fetch("/api/leaderboard", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      playerName: playerName || "Player",
+      score,
+      accuracy,
+    }),
+  });
+} catch (error) {
+  console.error("Leaderboard save failed:", error);
+}
 
-    await fetchLeaderboard();
-    }catch (error){
-        console.error("Leaderboard save failed:", error)
-    }
-    
-
-    setScreen("results");
-    return;
+setScreen("results");
+return;
   }
 
   setCurrentIndex((prev) => prev + 1);
