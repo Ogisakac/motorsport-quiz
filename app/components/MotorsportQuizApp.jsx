@@ -198,8 +198,8 @@ const currentQuestion = filteredQuestions[currentIndex];
       accuracy,
     };
 
-
-    await fetch("/api/leaderboard", {
+    try{
+        await fetch("/api/leaderboard", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -212,6 +212,10 @@ const currentQuestion = filteredQuestions[currentIndex];
     });
 
     await fetchLeaderboard();
+    }catch (error){
+        console.error("Leaderboard save failed:", error)
+    }
+    
 
     setScreen("results");
     return;
