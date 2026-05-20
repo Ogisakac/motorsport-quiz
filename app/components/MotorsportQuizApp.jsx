@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import React, {useEffect ,useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Trophy, Timer, RotateCcw, Flag, Bike, Car, Crown, CheckCircle2, XCircle } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
@@ -96,6 +96,10 @@ const initialLeaderboard = [
   { name: "Luka", score: 590, accuracy: 71 },
 ];
 
+
+
+
+
 function getDifficultyPoints(difficulty) {
   if (difficulty === "Hard") return 150;
   if (difficulty === "Medium") return 120;
@@ -121,6 +125,24 @@ export default function MotorsportQuizApp() {
     : questions.filter(
         (q) => q.difficulty === selectedDifficulty
       );
+
+async function fetchLeaderboard() {
+  const response = await fetch("/api/leaderboard");
+  const data = await response.json();
+
+  const formatted = data.map((item) => ({
+    name: item.player_name,
+    score: item.score,
+    accuracy: item.accuracy,
+  }));
+
+ 
+
+  setLeaderboard(formatted);
+}
+ useEffect(() => {
+  fetchLeaderboard();
+}, []);
 
 const currentQuestion = filteredQuestions[currentIndex];
   const isAnswered = selectedAnswer !== null;
@@ -149,34 +171,55 @@ const currentQuestion = filteredQuestions[currentIndex];
     setSelectedAnswer(option);
   }
 
-  function nextQuestion() {
-    const correct = selectedAnswer === currentQuestion.answer;
-    const points = correct ? getDifficultyPoints(currentQuestion.difficulty) : 0;
+  async function nextQuestion() {
+  const correct = selectedAnswer === currentQuestion.answer;
+  const points = correct ? getDifficultyPoints(currentQuestion.difficulty) : 0;
 
-    const nextAnswers = [
-      ...answers,
-      {
-        questionId: currentQuestion.id,
-        selectedAnswer,
-        correct,
-        points,
+  const nextAnswers = [
+    ...answers,
+    {
+      questionId: currentQuestion.id,
+      selectedAnswer,
+      correct,
+      points,
+    },
+  ];
+
+  setAnswers(nextAnswers);
+
+  if (currentIndex + 1 >= filteredQuestions.length) {
+    const correctCount = nextAnswers.filter((item) => item.correct).length;
+    const score = nextAnswers.reduce((sum, item) => sum + item.points, 0);
+    const accuracy = Math.round((correctCount / filteredQuestions.length) * 100);
+
+    const newPlayer = {
+      name: playerName || "Player",
+      score,
+      accuracy,
+    };
+
+
+    await fetch("/api/leaderboard", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
       },
-    ];
+      body: JSON.stringify({
+        playerName: playerName || "Player",
+        score,
+        accuracy,
+      }),
+    });
 
-    setAnswers(nextAnswers);
+    await fetchLeaderboard();
 
-    if (currentIndex + 1 >= filteredQuestions.length) {
-      const correctCount = nextAnswers.filter((item) => item.correct).length;
-      const score = nextAnswers.reduce((sum, item) => sum + item.points, 0);
-      const accuracy = Math.round((correctCount / filteredQuestions.length) * 100);
-      setLeaderboard((prev) => [...prev, { name: playerName || "Player", score, accuracy }]);
-      setScreen("results");
-      return;
-    }
-
-    setCurrentIndex((prev) => prev + 1);
-    setSelectedAnswer(null);
+    setScreen("results");
+    return;
   }
+
+  setCurrentIndex((prev) => prev + 1);
+  setSelectedAnswer(null);
+}
 
   function resetQuiz() {
     setScreen("intro");
