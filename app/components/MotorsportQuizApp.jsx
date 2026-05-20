@@ -114,8 +114,15 @@ export default function MotorsportQuizApp() {
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [answers, setAnswers] = useState([]);
   const [leaderboard, setLeaderboard] = useState(initialLeaderboard);
+  const [selectedDifficulty, setSelectedDifficulty] = useState("All"); 
+  const filteredQuestions =
+  selectedDifficulty === "All"
+    ? questions
+    : questions.filter(
+        (q) => q.difficulty === selectedDifficulty
+      );
 
-  const currentQuestion = questions[currentIndex];
+const currentQuestion = filteredQuestions[currentIndex];
   const isAnswered = selectedAnswer !== null;
   const isCorrect = selectedAnswer === currentQuestion?.answer;
 
@@ -158,10 +165,10 @@ export default function MotorsportQuizApp() {
 
     setAnswers(nextAnswers);
 
-    if (currentIndex + 1 >= questions.length) {
+    if (currentIndex + 1 >= filteredQuestions.length) {
       const correctCount = nextAnswers.filter((item) => item.correct).length;
       const score = nextAnswers.reduce((sum, item) => sum + item.points, 0);
-      const accuracy = Math.round((correctCount / questions.length) * 100);
+      const accuracy = Math.round((correctCount / filteredQuestions.length) * 100);
       setLeaderboard((prev) => [...prev, { name: playerName || "Player", score, accuracy }]);
       setScreen("results");
       return;
@@ -234,19 +241,29 @@ export default function MotorsportQuizApp() {
                         </Button>
                       </div>
 
-                      <div className="mt-8 grid gap-4 sm:grid-cols-3">
-                        {[
-                          ["Easy", "100 pts"],
-                          ["Medium", "120 pts"],
-                          ["Hard", "150 pts"],
-                        ].map(([label, points]) => (
-                          <div key={label} className="rounded-3xl border border-white/10 bg-white/5 p-4">
-                            <p className="text-sm text-white/45">Difficulty</p>
-                            <p className="mt-1 text-xl font-black">{label}</p>
-                            <p className="text-sm text-red-200">{points}</p>
-                          </div>
-                        ))}
-                      </div>
+                      <div className="mt-8 grid gap-4 sm:grid-cols-4">
+  {[
+    ["All", "All questions"],
+    ["Easy", "100 pts"],
+    ["Medium", "120 pts"],
+    ["Hard", "150 pts"],
+  ].map(([label, points]) => (
+    <button
+      key={label}
+      type="button"
+      onClick={() => setSelectedDifficulty(label)}
+      className={`rounded-3xl border p-4 text-left transition ${
+        selectedDifficulty === label
+          ? "border-red-400 bg-red-500/20"
+          : "border-white/10 bg-white/5 hover:bg-white/10"
+      }`}
+    >
+      <p className="text-sm text-white/45">Difficulty</p>
+      <p className="mt-1 text-xl font-black">{label}</p>
+      <p className="text-sm text-red-200">{points}</p>
+    </button>
+  ))}
+</div>
                     </CardContent>
                   </Card>
                 </motion.div>
@@ -268,7 +285,7 @@ export default function MotorsportQuizApp() {
                             {categoryIcon(currentQuestion.icon)}
                           </div>
                           <div>
-                            <p className="text-sm text-white/45">Question {currentIndex + 1} / {questions.length}</p>
+                            <p className="text-sm text-white/45">Question {currentIndex + 1} / {filteredQuestions.length}</p>
                             <p className="font-bold">{currentQuestion.category}</p>
                           </div>
                         </div>
@@ -281,7 +298,7 @@ export default function MotorsportQuizApp() {
                         <motion.div
                           className="h-full bg-red-500"
                           initial={{ width: 0 }}
-                          animate={{ width: `${((currentIndex + 1) / questions.length) * 100}%` }}
+                          animate={{ width: `${((currentIndex + 1) / filteredQuestions.length) * 100}%` }}
                         />
                       </div>
 
@@ -331,7 +348,7 @@ export default function MotorsportQuizApp() {
                             </p>
                             <p className="mt-2 text-white/65">{currentQuestion.explanation}</p>
                             <Button onClick={nextQuestion} className="mt-5 h-12 rounded-2xl bg-white px-6 font-bold text-slate-950 hover:bg-white/90">
-                              {currentIndex + 1 >= questions.length ? "Vidi rezultat" : "Sledeće pitanje"}
+                              {currentIndex + 1 >= filteredQuestions.length ? "Vidi rezultat" : "Sledeće pitanje"}
                             </Button>
                           </motion.div>
                         )}
@@ -364,7 +381,7 @@ export default function MotorsportQuizApp() {
                         </div>
                         <div className="rounded-3xl border border-white/10 bg-white/5 p-5">
                           <p className="text-sm text-white/45">Tačno</p>
-                          <p className="mt-1 text-4xl font-black">{result.correct}/{questions.length}</p>
+                          <p className="mt-1 text-4xl font-black">{result.correct}/{filteredQuestions.length}</p>
                         </div>
                         <div className="rounded-3xl border border-white/10 bg-white/5 p-5">
                           <p className="text-sm text-white/45">Accuracy</p>
