@@ -72,21 +72,92 @@ const questions = [
     category: "Formula 1",
     difficulty: "Medium",
     icon: "f1",
-    question: "Koliko guma standardno ima F1 bolid tokom vožnje?",
-    options: ["2", "3", "4", "6"],
-    answer: "4",
-    explanation: "F1 bolid ima četiri točka, odnosno četiri gume tokom vožnje.",
+    question: "Koji vozač je osvojio titulu 2007. godine sa samo jednim poenom prednosti?",
+    options: ["Lewis Hamilton", "Fernando Alonso", "Kimi Räikkönen", "Felipe Massa"],
+    answer: "Kimi Räikkönen",
+    explanation: "",
   },
   {
     id: 8,
-    category: "MotoGP",
-    difficulty: "Easy",
-    icon: "moto",
-    question: "Koliko točkova ima MotoGP motor?",
-    options: ["2", "3", "4", "6"],
-    answer: "2",
-    explanation: "MotoGP motocikl ima dva točka.",
+    category: "Formula 1",
+    difficulty: "Medium",
+    icon: "f1",
+    question: "Koja staza ima najdužu punu gas sekciju u kalendaru?",
+    options: ["Spa", "Monza", "Silverstone", "Suzuka"],
+    answer: "Monza",
+    explanation: "Monza ima najduzu pun gas sekciju",
   },
+  {
+    id: 9,
+    category: "Formula 1",
+    difficulty: "Medium",
+    icon: "f1",
+    question: "Koji tim je koristio čuveni double diffuser 2009?",
+    options: ["Ferrari", "Red Bull", "Brawn GP", "Renault"],
+    answer: "Brawn GP",
+    explanation: "Brawn GP je koristio cuveni double diffuser 2009",
+  },
+  {
+    id: 10,
+    category: "Formula 1",
+    difficulty: "Hard",
+    icon: "f1",
+    question: "Koji vozač je pobedio na svojoj prvoj F1 trci za Ferrari 1990. godine?",
+    options: ["Alain Prost", "Nigel Mansell", "Gerhard Berger", "Ayrton Senna"],
+    answer: "Nigel Mansell",
+    explanation: "",
+  },
+   {
+    id: 11,
+    category: "Formula 1",
+    difficulty: "Hard",
+    icon: "f1",
+    question: "Koje godine je uveden halo sistem?",
+    options: ["2016", "2017", "2020", "2018"],
+    answer: "2018",
+    explanation: "",
+  },
+    {
+    id: 12,
+    category: "MotoGP",
+    difficulty: "medium",
+    icon: "moto",
+    question: "Koji proizvođač je poslednji osvojio MotoGP titulu pre Ducati dominacije?",
+    options: ["Honda", "Yamaha", "Suzuki", "Aprilia"],
+    answer: "Yamaha",
+    explanation: "",
+  },
+  {
+    id: 13,
+    category : "MotoGp",
+    difficulty: "medium",
+    icon : "moto",
+    question : "Na kojoj stazi je Valentino Rossi ostvario svoju poslednju MotoGP pobedu?",
+    options: ["Mugello", "Assen", "Catalunya", "Silverstone"],
+    answer: "Assen",
+    explanation : ""
+  },
+  {
+    id: 14,
+    category : "MotoGp",
+    difficulty: "hard",
+    icon : "moto",
+    question : "Koji vozač je osvojio MotoGP titulu kao rookie?",
+    options: ["Valentino Rossi", "Jorge Lorenzo", "Marc Marquez", "Dani Pedrosa"],
+    answer: "Marc Marquez",
+    explanation : ""
+  },
+    {
+    id: 15,
+    category : "MotoGp",
+    difficulty: "hard",
+    icon : "moto",
+    question : "Koji motocikl je koristio Casey Stoner tokom dominantne sezone 2007?",
+    options: ["Yamaha YZR-M1", "Ducati Desmosedici GP7", "Honda RC212V", "Suzuki GSV-R"],
+    answer: "Ducati Desmosedici GP7",
+    explanation : ""
+  }
+  
 ];
 
 const initialLeaderboard = [
@@ -264,13 +335,13 @@ return;
                     <CardContent className="p-6 sm:p-10">
                       <div className="mb-8 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/10 px-4 py-2 text-sm text-white/70">
                         <Timer className="h-4 w-4" />
-                        8 pitanja · F1 + MotoGP · Score system
+                        15 pitanja · F1 + MotoGP · Score system
                       </div>
                       <h2 className="max-w-3xl text-4xl font-black leading-tight sm:text-6xl">
                         Dokaži da znaš motorsport bolje od ekipe.
                       </h2>
                       <p className="mt-5 max-w-2xl text-lg leading-8 text-white/65">
-                        Moderan quiz app sa kategorijama, animacijama, objašnjenjima odgovora, skorom i leaderboardom.
+                        {/* Moderan quiz app sa kategorijama, animacijama, objašnjenjima odgovora, skorom i leaderboardom. */}
                       </p>
 
                       <div className="mt-8 grid gap-3 sm:grid-cols-[1fr_auto]">
